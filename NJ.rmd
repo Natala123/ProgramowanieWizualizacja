@@ -40,6 +40,147 @@ plot(cars)
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 
+#zajęcia 2 19.10
+
+R version 3.2.2 (2015-08-14) -- "Fire Safety"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> install.packages("BetaBit")
+Installing package into ‘C:/Users/nj332194/Documents/R/win-library/3.2’
+(as ‘lib’ is unspecified)
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/3.2/BetaBit_1.3.zip'
+Content type 'application/zip' length 3364314 bytes (3.2 MB)
+downloaded 3.2 MB
+
+package ‘BetaBit’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+	C:\Users\nj332194\AppData\Local\Temp\RtmpyuPxru\downloaded_packages
+> library(BetaBit)
+
+ _____     _                    _    _____ _ _      _____
+| __  |___| |_ ___    ___ ___ _| |  | __  |_| |_   |   __|___ _____ ___ ___
+| __ -| -_|  _| .'|  | .'|   | . |  | __ -| |  _|  |  |  | .'|     | -_|_ -|
+|_____|___|_| |__,|  |__,|_|_|___|  |_____|_|_|    |_____|__,|_|_|_|___|___|
+
+Choose your game. Just type the name of the selected game in the console.
+It's a function so do not forget about parentheses!
+
+1. proton()
+2. frequon()
+3. regression()
+
+Warning message:
+pakiet ‘BetaBit’ został zbudowany w wersji R 3.2.5 
+> proton()
+ _____ _          _____         _              _____
+|_   _| |_ ___   |  _  |___ ___| |_ ___ ___   |   __|___ _____ ___
+  | | |   | -_|  |   __|  _| . |  _| . |   |  |  |  | .'|     | -_|
+  |_| |_|_|___|  |__|  |_| |___|_| |___|_|_|  |_____|__,|_|_|_|___|
+
+Your goal is to find Slawomir Pietraszko's credentials for the Proton server.
+This is the only way for Bit to find the secret plans of Pietraszko's laboratory.
+
+Remember that at any time you may add `hint=TRUE` argument to the executed command in order to get additional suggestions.
+
+Pietraszko uses a password which is very difficult to guess.
+At first, try to hack an account of a person which is not as cautious as Pietraszko.
+
+But who is the weakest point? Initial investigation suggests that John Insecure doesn't care about security and has an account on the Proton server. He may use a password which is easy to crack.
+Let's attack his account first!
+
+Problem 1: Find the login of John Insecure.
+
+Bit has scrapped 'employees' data (names and logins) from the www web page of Technical University of Warsaw. The data is in the data.frame `employees`. 
+Now, your task is to find John Insecure's login.
+When you finally find out what John's login is, use `proton(action = "login", login="XYZ")` command, where XYZ is Insecure's login.
+> table(BetaBit$employees)
+Error in table(BetaBit$employees) : object 'BetaBit' not found
+> head(employees)
+    name  surname       login
+1  Jorge  Patrick   j.patrick
+2 Gerald     Long gerald.long
+3 Javier  Mendoza   j.mendoza
+4    Roy Johnston        rjoh
+5  Annie    Keith annie.keith
+6   Nora   Castro        ncas
+> x=table(employees)
+> y<-filter(employees,surname=="Insecure")
+Error in filter(employees, surname == "Insecure") : 
+  object 'surname' not found
+In addition: Warning message:
+In data.matrix(data) : NAs introduced by coercion
+> y<-filter(employees,=="")
+Error: unexpected '==' in "y<-filter(employees,=="
+> library(dplyr)
+
+Dołączanie pakietu: ‘dplyr’
+
+Następujące obiekty zostały zakryte z ‘package:stats’:
+
+    filter, lag
+
+Następujące obiekty zostały zakryte z ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Warning message:
+pakiet ‘dplyr’ został zbudowany w wersji R 3.2.5 
+> head(employees) 
+    name  surname       login
+1  Jorge  Patrick   j.patrick
+2 Gerald     Long gerald.long
+3 Javier  Mendoza   j.mendoza
+4    Roy Johnston        rjoh
+5  Annie    Keith annie.keith
+6   Nora   Castro        ncas
+> 
+> filter(employees,surname == "Insecure")
+  name  surname   login
+1 John Insecure johnins
+> proton(action = "login", login="johnins")
+Congratulations! You have found out what John Insecure's login is!
+It is highly likely that he uses some typical password.
+Bit downloaded from the Internet a database with 1000 most commonly used passwords.
+You can find this database in the `top1000passwords` vector.
+
+Problem 2: Find John Insecure's password.
+
+Use `proton(action = "login", login="XYZ", password="ABC")` command in order to log into the Proton server with the given credentials.
+If the password is correct, you will get the following message:
+`Success! User is logged in!`.
+Otherwise you will get:
+`Password or login is incorrect!`.
+> head(top1000passwords)
+[1] "123456"    "password"  "12345678"  "qwerty"    "123456789" "12345"    
+> for(i in 1:1000){
++     proton(action = "login", login="johnins", password=top1000passwords[i])
++ }
+Well done! This is the right password!
+Bit used John Insecure's account in order to log into the Proton server.
+It turns out that John has access to server logs.
+Now, Bit wants to check from which workstation Pietraszko is frequently logging into the Proton server. Bit hopes that there will be some useful data.  
+
+Logs are in the `logs` dataset. 
+Consecutive columns contain information such as: who, when and from which computer logged into Proton.
+
+Problem 3: Check from which server Pietraszko logs into the Proton server most often.
+
+Use `proton(action = "server", host="XYZ")` command in order to learn more  about what can be found on the XYZ server.
+The biggest chance to find something interesting is to find a server from which Pietraszko logs in the most often.
 
 
 
